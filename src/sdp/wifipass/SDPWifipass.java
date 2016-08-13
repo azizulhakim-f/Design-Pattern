@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -58,7 +60,11 @@ public class SDPWifipass {
         new Thread(register).start();
         /**********************************************************************/
         
-        int rand, fraud, wait, createnow, j;
+        int rand, fraud, wait, createnow, j, totalWait=0;
+        
+        Queue<Student> Q = new LinkedList<>();
+        
+        
         for( i=0; i<=n; )
         {
             // create minimum one and up to three student at a time...
@@ -67,6 +73,7 @@ public class SDPWifipass {
             {
                 Student stu = new Student(studentName[j+i], j+i);
                 stu.setStartTime(System.nanoTime());
+                Q.add(stu);
 
                 // randomly provide a Proffessor type
                 rand = ThreadLocalRandom.current().nextInt(1, 3 + 1);
@@ -84,9 +91,38 @@ public class SDPWifipass {
             
             
             wait = ThreadLocalRandom.current().nextInt(1, 10+1);
+            totalWait += wait;
             Thread.sleep(wait);
             
+            if(totalWait>20){
+                totalWait=0;
+                int size = Q.size();
+                for(int k=0; k<size; k++){
+                    Student stud = Q.poll();
+                    if(register.passReady(stud)){
+                        register.givePass(stud);
+                        stud.setEndTime(System.nanoTime());
+                        System.out.println(stud.name + " got pass: " +stud.getPassword() + " time-took: "+stud.totalTime());
+                        
+                    }
+                    else {
+                        Q.add(stud);
+                    }
+                }
+            }
+            
         }
+        
+        /*
+        A1.endNow();
+        A2.endNow();
+        C1.endNow();
+        C2.endNow();
+        E1.endNow();
+        E2.endNow();
+        office.endNow();
+        register.endNow();
+                */
         
     }
     
