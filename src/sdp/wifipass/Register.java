@@ -83,14 +83,20 @@ public class Register implements Runnable{
     }
 
     boolean passReady(Student stu) {
-        boolean ret = Sheet.containsKey(stu.id);
-        if(!ret)System.out.println("Password not ready yet for: " + stu.name );
-        return ret;
+        if(Sheet.containsKey(stu.id)==false){
+            System.out.println("Password not ready yet for: " + stu.name );
+            return false;
+        }  
+        
+        int ret = Sheet.get(stu.id);     
+        if( ret==1 )return true;
+        return false;
     }
 
     void givePass(Student stu) {
         stu.setPassword( this.getPassword() );
         stu.setEndTime(System.nanoTime());
+        Sheet.put(stu.id, 2);
     }
     
 }

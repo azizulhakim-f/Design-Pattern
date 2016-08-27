@@ -73,6 +73,8 @@ public class SDPWifipass {
             {
                 Student stu = new Student(studentName[j+i], j+i);
                 stu.setStartTime(System.nanoTime());
+                System.out.println(stu.name + " applied");
+                
                 Q.add(stu);
 
                 // randomly provide a Proffessor type
