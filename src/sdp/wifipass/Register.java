@@ -5,6 +5,8 @@
  */
 package sdp.wifipass;
 
+import static java.lang.Math.random;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -37,17 +39,18 @@ public class Register implements Runnable{
     
     void generatePassword()
     {
+        NumPasswordFactory Npass = new NumPasswordFactory();
+        CharPasswordFactory Cpass = new CharPasswordFactory();
+        
         passCount=0;
         int i;
         for(i=0 ; i<1024; i++)
         {
-            String pass = UUID.randomUUID().toString().substring(25);
-            
+            String pass = Cpass.getPass(4) + Npass.getPass(4);
             if(uniquePass.containsKey(pass)){
                 i--;
                 continue;
             }
-            
             password[i] = pass;
             uniquePass.put(pass, 1);
         }
@@ -97,6 +100,41 @@ public class Register implements Runnable{
         stu.setPassword( this.getPassword() );
         stu.setEndTime(System.nanoTime());
         Sheet.put(stu.id, 2);
+    }
+    
+}
+
+interface PasswordFactory{
+    String getPass(int len);
+    
+}
+
+class NumPasswordFactory implements PasswordFactory{
+
+    @Override
+    public String getPass(int len) {
+        String ret = "";
+        
+        for(int i=0; i<4; i++){
+            int rand = ThreadLocalRandom.current().nextInt(0, 9 + 1);
+            ret += (char) ( rand + '0' );
+        }
+        return ret;
+    }
+    
+}
+
+class CharPasswordFactory implements PasswordFactory{
+
+    @Override
+    public String getPass(int len) {
+        String ret = "";
+        
+        for(int i=0; i<4; i++){
+            int rand = ThreadLocalRandom.current().nextInt(0, 25 + 1);
+            ret += (char) ( rand + 'A' );
+        }
+        return ret;
     }
     
 }

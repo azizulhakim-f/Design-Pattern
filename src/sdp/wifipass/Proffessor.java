@@ -14,7 +14,7 @@ public class Proffessor implements Runnable{
     public String name;
     static Office office;
     private static BlockingQueue queue = new ArrayBlockingQueue(1024);
-    private ArrayList<Proffessor> list = new ArrayList<>();
+    private ArrayList<Proffessor> subordinates = new ArrayList<>();
     private int childcnt;
     
     Proffessor(String rank, String name){
@@ -24,7 +24,7 @@ public class Proffessor implements Runnable{
     }
     
     void addChild(Proffessor prof){
-        list.add(prof);
+        subordinates.add(prof);
         childcnt++;
     }
     
@@ -56,10 +56,10 @@ public class Proffessor implements Runnable{
     
     void print(int space){
         for(int j=0; j<space; j++)System.out.print(" ");
-        System.out.println(this.name);
+        System.out.println(this.rank + " " + this.name);
         for(int i=0; i<childcnt; i++)
         {
-            list.get(i).print(space+4);
+            subordinates.get(i).print(space+4);
         }
     }
 }

@@ -96,8 +96,8 @@ public class SDPWifipass {
                 if(rand==2)C1.sendStudent(stu);
                 if(rand==3)E1.sendStudent(stu);
                                 
-                fraud = ThreadLocalRandom.current().nextInt(1, 5 + 1);
-                if(fraud==1){ //20 percent time...apply again.
+                fraud = ThreadLocalRandom.current().nextInt(1, 10 + 1);
+                if(fraud==1){ //10 percent time...apply again.
                     j--; 
                 }
             }
