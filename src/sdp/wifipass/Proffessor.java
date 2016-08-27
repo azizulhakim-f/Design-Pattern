@@ -1,5 +1,6 @@
 package sdp.wifipass;
 
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,10 +14,18 @@ public class Proffessor implements Runnable{
     public String name;
     static Office office;
     private static BlockingQueue queue = new ArrayBlockingQueue(1024);
+    private ArrayList<Proffessor> list = new ArrayList<>();
+    private int childcnt;
     
     Proffessor(String rank, String name){
         this.rank = rank;
         this.name = name;
+        this.childcnt = 0;
+    }
+    
+    void addChild(Proffessor prof){
+        list.add(prof);
+        childcnt++;
     }
     
     void sendStudent(Student stu){
@@ -42,6 +51,15 @@ public class Proffessor implements Runnable{
                 //int wait = ThreadLocalRandom.current().nextInt(1, 500+1);
                 //Thread.sleep(wait);
             } catch (InterruptedException ex) {}  
+        }
+    }
+    
+    void print(int space){
+        for(int j=0; j<space; j++)System.out.print(" ");
+        System.out.println(this.name);
+        for(int i=0; i<childcnt; i++)
+        {
+            list.get(i).print(space+4);
         }
     }
 }

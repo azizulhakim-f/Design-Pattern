@@ -44,6 +44,19 @@ public class SDPWifipass {
         AssociateProffessor E1 = new AssociateProffessor("AssociateProffessor", "E1");
         AssociateProffessor E2 = new AssociateProffessor("AssociateProffessor", "E2");
         
+        ///childss
+        A1.addChild(C1);
+        A2.addChild(C2);
+        C1.addChild(E1);
+        C1.addChild(E2);
+        C2.addChild(E1);
+        C2.addChild(E2);
+        
+        
+        A1.print(0);
+        A2.print(0);
+        
+        
         Office office = new Office("B");
         Register register = new Register("D");
         
