@@ -39,14 +39,13 @@ public class Register implements Runnable{
     
     void generatePassword()
     {
-        NumPasswordFactory Npass = new NumPasswordFactory();
-        CharPasswordFactory Cpass = new CharPasswordFactory();
+        PasswordFactory PF = new PasswordFactory();
         
         passCount=0;
         int i;
         for(i=0 ; i<1024; i++)
         {
-            String pass = Cpass.getPass(4) + Npass.getPass(4);
+            String pass = PF.getPass("CHARACTER", 4) + PF.getPass("NUMERIC", 4);
             if(uniquePass.containsKey(pass)){
                 i--;
                 continue;
@@ -104,12 +103,26 @@ public class Register implements Runnable{
     
 }
 
-interface PasswordFactory{
+class PasswordFactory{
+     String getPass(String type, int length){
+         NumPassword  Npass = new NumPassword();
+         CharPassword Cpass = new CharPassword();
+         
+         if(type.equals("NUMERIC")){
+             return Npass.getPass(length);
+         }
+         else { //default 
+             return Cpass.getPass(length);
+         }
+     }
+}
+
+interface Password{
     String getPass(int len);
     
 }
 
-class NumPasswordFactory implements PasswordFactory{
+class NumPassword implements Password{
 
     @Override
     public String getPass(int len) {
@@ -124,7 +137,7 @@ class NumPasswordFactory implements PasswordFactory{
     
 }
 
-class CharPasswordFactory implements PasswordFactory{
+class CharPassword implements Password{
 
     @Override
     public String getPass(int len) {
