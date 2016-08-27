@@ -151,7 +151,7 @@ class NumPassword implements Password{
             ret += (char) ( rand + '0' );
         }
         
-        for(int i=0; i<childcnt; i++){
+        for(int i=0; i<childcnt&&i<len; i++){
             ret += childs.get(i).getPass(1);
         }
         
@@ -179,7 +179,7 @@ class CharPassword implements Password{
             ret += (char) ( rand + 'A' );
         }
         
-        for(int i=0; i<childcnt; i++){
+        for(int i=0; i<childcnt&&i<len; i++){
             ret += childs.get(i).getPass(1);
         }
         
