@@ -101,7 +101,6 @@ public class SDPWifipass {
                     Student stud = Q.poll();
                     if(register.passReady(stud)){
                         register.givePass(stud);
-                        stud.setEndTime(System.nanoTime());
                         System.out.println(stud.name + " got pass: " +stud.getPassword() + " time-took: "+stud.totalTime());
                         
                     }

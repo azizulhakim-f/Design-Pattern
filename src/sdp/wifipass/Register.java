@@ -5,6 +5,8 @@
  */
 package sdp.wifipass;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -21,7 +23,8 @@ public class Register implements Runnable{
     private int passLimit;
     String[] password = new String[1030];
     private static BlockingQueue queue = new ArrayBlockingQueue(1024);
-    
+    Map<String, Integer> Sheet = new HashMap<>();
+    Map<String, Integer> uniquePass = new HashMap<>();
     
     Register(String name){
         this.name = name;
@@ -38,7 +41,15 @@ public class Register implements Runnable{
         int i;
         for(i=0 ; i<1024; i++)
         {
-            password[i] = UUID.randomUUID().toString();
+            String pass = UUID.randomUUID().toString().substring(25);
+            
+            if(uniquePass.containsKey(pass)){
+                i--;
+                continue;
+            }
+            
+            password[i] = pass;
+            uniquePass.put(pass, 1);
         }
         passLimit = i;
     }
@@ -64,17 +75,22 @@ public class Register implements Runnable{
                 String pass = getPassword();
                 pass = pass.substring(0, 7);
                 
-                stu.setPassword(pass);
-                stu.setEndTime(System.nanoTime());
-                
-                System.out.println(stu.name + " pass: " + pass + " time took: "+stu.totalTime());
-                
-                
-                //int wait = ThreadLocalRandom.current().nextInt(1, 500+1);
-                //Thread.sleep(wait);
+                Sheet.put(stu.id,1);  
+               
             } catch (InterruptedException ex) {}
         }
         
+    }
+
+    boolean passReady(Student stu) {
+        boolean ret = Sheet.containsKey(stu.id);
+        if(!ret)System.out.println("Password not ready yet for: " + stu.name );
+        return ret;
+    }
+
+    void givePass(Student stu) {
+        stu.setPassword( this.getPassword() );
+        stu.setEndTime(System.nanoTime());
     }
     
 }

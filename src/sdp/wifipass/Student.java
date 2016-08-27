@@ -40,4 +40,8 @@ public class Student {
     double totalTime(){
         return ((double)endTime-startTime)/1000000.0;
     }
+
+    String getPassword() {
+        return wifipassword;
+    }
 }
