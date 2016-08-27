@@ -54,12 +54,26 @@ public class Proffessor implements Runnable{
         }
     }
     
-    void print(int space){
-        for(int j=0; j<space; j++)System.out.print(" ");
-        System.out.println(this.rank + " " + this.name);
-        for(int i=0; i<childcnt; i++)
-        {
-            subordinates.get(i).print(space+4);
+    void compositePrint(int space, String mode){
+        
+        if(mode.equals("PARENT")){
+            for(int j=0; j<space; j++)System.out.print(" ");
+            System.out.println(this.rank + " " + this.name);
+            for(int i=0; i<childcnt; i++)
+            {
+                subordinates.get(i).compositePrint(space+4, mode);
+            }
+        }
+        else {
+             
+            for(int i=0; i<childcnt; i++)
+            {
+                //for(int j=0; j<space+4; j++)System.out.print(" ");
+                subordinates.get(i).compositePrint(space+4, mode);
+            }
+            
+            System.out.println(this.rank + " " + this.name);
+            
         }
     }
 }

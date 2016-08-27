@@ -52,9 +52,10 @@ public class SDPWifipass {
         C2.addChild(E1);
         C2.addChild(E2);
         
-        
-        A1.print(0);
-        A2.print(0);
+        A2.compositePrint(0, "PARENT");
+        System.out.println("\n");
+        A1.compositePrint(0, "CHILD");
+        System.out.println("\n");
         
         
         Office office = new Office("B");
