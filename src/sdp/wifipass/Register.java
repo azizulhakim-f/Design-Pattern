@@ -45,7 +45,7 @@ public class Register implements Runnable{
         int i;
         for(i=0 ; i<1024; i++)
         {
-            String pass = PF.getPass("CHARACTER", 4) + PF.getPass("NUMERIC", 4);
+            String pass = PF.getPass("CHARACTER", 5) + PF.getPass("NUMERIC", 3);
             if(uniquePass.containsKey(pass)){
                 i--;
                 continue;
@@ -106,7 +106,17 @@ public class Register implements Runnable{
 class PasswordFactory{
      String getPass(String type, int length){
          NumPassword  Npass = new NumPassword();
+         NumPassword  Np1 = new NumPassword();
+         NumPassword  Np2 = new NumPassword();
+         Npass.addChild(Np1);
+         Npass.addChild(Np2);
+         
          CharPassword Cpass = new CharPassword();
+         CharPassword Cp1 = new CharPassword();
+         CharPassword Cp2 = new CharPassword();
+         Cpass.addChild(Cp1);
+         Cpass.addChild(Cp2);
+         
          
          if(type.equals("NUMERIC")){
              return Npass.getPass(length);
@@ -119,19 +129,32 @@ class PasswordFactory{
 
 interface Password{
     String getPass(int len);
-    
+     
 }
 
 class NumPassword implements Password{
 
+    private ArrayList<NumPassword> childs = new ArrayList<>();
+    int childcnt=0;
+    
+    void addChild(NumPassword NP){
+        childs.add(NP);
+        childcnt++;
+    }
+    
     @Override
     public String getPass(int len) {
         String ret = "";
         
-        for(int i=0; i<4; i++){
+        for(int i=0; i<len-childcnt; i++){
             int rand = ThreadLocalRandom.current().nextInt(0, 9 + 1);
             ret += (char) ( rand + '0' );
         }
+        
+        for(int i=0; i<childcnt; i++){
+            ret += childs.get(i).getPass(1);
+        }
+        
         return ret;
     }
     
@@ -139,14 +162,27 @@ class NumPassword implements Password{
 
 class CharPassword implements Password{
 
+    private ArrayList<CharPassword> childs = new ArrayList<>();
+    int childcnt=0;
+    
+    void addChild(CharPassword CP){
+        childs.add(CP);
+        childcnt++;
+    }
+    
     @Override
     public String getPass(int len) {
         String ret = "";
         
-        for(int i=0; i<4; i++){
+        for(int i=0; i<len-childcnt; i++){
             int rand = ThreadLocalRandom.current().nextInt(0, 25 + 1);
             ret += (char) ( rand + 'A' );
         }
+        
+        for(int i=0; i<childcnt; i++){
+            ret += childs.get(i).getPass(1);
+        }
+        
         return ret;
     }
     
